@@ -5,7 +5,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   if (req.method === 'POST') {
     const { name, email, message } = req.body;
     try {
-      const db = openDB();
+      const db = await openDB();
+      if (!db) throw new Error('Failed to open database');
       const stmt = db.prepare('INSERT INTO contact (name, email, message) VALUES (?, ?, ?)');
       stmt.run(name, email, message);
       res.status(200).json({ message: 'Message sent successfully!' });

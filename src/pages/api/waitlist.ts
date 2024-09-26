@@ -12,7 +12,8 @@ export default async function handler(
   if (req.method === 'POST') {
     const { email }: WaitlistData = req.body
     try {
-      const db = openDB()
+      const db = await openDB()
+      if (!db) throw new Error('Failed to open database');
       const stmt = db.prepare('INSERT INTO waitlist (email) VALUES (?)')
       stmt.run(email)
       res.status(200).json({ message: 'Thank you for joining our waitlist!' })

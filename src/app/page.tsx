@@ -64,7 +64,6 @@ const TeamMember = ({ member }: { member: TeamMember }) => {
 };
 
 export default function Home() {
-  const [isVisible, setIsVisible] = useState(false);
   const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -78,7 +77,6 @@ export default function Home() {
   const footerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    setIsVisible(true);
     setMounted(true);
   }, []);
 
@@ -355,7 +353,7 @@ export default function Home() {
           </div>
           
           <p className="text-lg sm:text-xl mb-10 max-w-2xl text-center">
-            Don't let diabetes unlock your feet. Get smart insoles now, click the button below to join the movement.
+            Don&apos;t let diabetes unlock your feet. Get smart insoles now, click the button below to join the movement.
           </p>
           
           <button 
@@ -471,7 +469,7 @@ export default function Home() {
                 Smart Insoles for Diabetic Patients
               </h3>
               <p className="text-gray-700 dark:text-gray-300 mb-6 leading-relaxed">
-                At APPO LTD, we've revolutionized diabetic care with our smart insoles. These innovative devices are equipped with cutting-edge sensors designed to:
+                At APPO LTD, we&apos;ve revolutionized diabetic care with our smart insoles. These innovative devices are equipped with cutting-edge sensors designed to:
               </p>
               <ul className="list-disc list-inside text-gray-700 dark:text-gray-300 mb-6 space-y-2">
                 <li>Identify and track diabetic foot ulcers</li>
@@ -505,7 +503,7 @@ export default function Home() {
           <div className="bg-white dark:bg-gray-800 p-6 sm:p-8 rounded-lg shadow-lg text-center">
             <h3 className="text-xl sm:text-2xl font-semibold mb-4">Coming Soon</h3>
             <p className="text-gray-600 dark:text-gray-300 mb-6">
-              Our innovative smart insoles app is on its way. Join our waitlist to be the first to know when it's available!
+              Our innovative smart insoles app is on its way. Join our waitlist to be the first to know when it&apos;s available!
             </p>
             <div className="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4">
               <button 

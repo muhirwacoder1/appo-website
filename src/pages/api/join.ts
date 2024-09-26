@@ -13,7 +13,8 @@ export default async function handler(
   if (req.method === 'POST') {
     const { name, email }: JoinData = req.body
     try {
-      const db = openDB()
+      const db = await openDB()
+      if (!db) throw new Error('Failed to open database');
       const stmt = db.prepare('INSERT INTO members (name, email) VALUES (?, ?)')
       stmt.run(name, email)
       res.status(200).json({ message: 'Thank you for joining!' })
