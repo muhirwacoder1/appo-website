@@ -254,7 +254,7 @@ export default function Home() {
       <div className="flex flex-col min-h-screen">
         <header className="sticky top-4 z-50 mx-4 sm:mx-6 lg:mx-8">
           <div className="max-w-7xl mx-auto">
-            <Menubar className="flex justify-between items-center border-none bg-white/70 dark:bg-gray-800/70 backdrop-blur-md shadow-lg rounded-[40px] py-4 px-6 transition-all duration-300 hover:bg-white/80 dark:hover:bg-gray-800/80">
+            <Menubar className="flex justify-between items-center border-none bg-white/70 dark:bg-gray-800/70 backdrop-blur-md shadow-lg rounded-[50px] py-4 px-6 transition-all duration-300 hover:bg-white/80 dark:hover:bg-gray-800/80">
               <div className="flex items-center">
                 <Image
                   src="/images/Screenshot 2024-09-16 150314.png"
@@ -268,7 +268,7 @@ export default function Home() {
                 {["Home", "Products", "Partners", "Services", "Team", "About", "Contact"].map((item) => (
                   <MenubarMenu key={item}>
                     <MenubarTrigger 
-                      className="text-sm hover:bg-white/90 dark:hover:bg-gray-700/90 rounded-[25px] transition-all duration-300 px-5 py-2.5 cursor-pointer hover:scale-105"
+                      className="text-sm hover:bg-white/90 dark:hover:bg-gray-700/90 rounded-[30px] transition-all duration-300 px-5 py-2.5 cursor-pointer hover:scale-105"
                       onClick={() => scrollToSection(item.toLowerCase())}
                     >
                       {item}
@@ -353,34 +353,45 @@ export default function Home() {
           ></div>
         )}
 
-        <main className="flex-grow flex flex-col items-center justify-center px-4 py-8 sm:py-16 sm:px-6 lg:px-8">
-          <section id="home" className="w-full max-w-5xl mx-auto flex flex-col items-center justify-center">
-            <div className="mb-12 max-w-4xl text-center">
-              <HyperText
-                text="Advancing possibilities"
-                className="text-3xl sm:text-4xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600"
-                duration={1500}
-              />
-              <HyperText
-                text="in prosthetics and orthotics"
-                className="text-3xl sm:text-4xl md:text-5xl font-bold mt-2 bg-clip-text text-transparent bg-gradient-to-r from-purple-600 to-blue-600"
-                duration={1500}
-              />
+        <main className="flex-grow flex flex-col items-center justify-center px-4 py-8 sm:py-12 sm:px-6 lg:px-8">
+          <section id="home" className="relative w-full min-h-[85vh] flex flex-col items-center justify-center px-4">
+            <div className="text-center max-w-4xl mx-auto">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+                className="mb-6 flex flex-col items-center"
+              >
+                <div className="flex flex-col items-center space-y-2">
+                  <HyperText
+                    text="Advancing possibilities"
+                    className="text-3xl sm:text-4xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600 whitespace-nowrap"
+                    duration={1500}
+                  />
+                  <HyperText
+                    text="in prosthetics and orthotics"
+                    className="text-3xl sm:text-4xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-600 to-blue-600 whitespace-nowrap"
+                    duration={1500}
+                  />
+                </div>
+                <p className="text-xl sm:text-2xl mt-8 mb-8 max-w-2xl px-4 font-medium bg-gradient-to-r from-gray-700 to-gray-900 dark:from-gray-300 dark:to-gray-100 bg-clip-text text-transparent">
+                  Don&apos;t let diabetes unlock your feet.
+                </p>
+              </motion.div>
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.2, duration: 0.5 }}
+                className="flex justify-center"
+              >
+                <button
+                  onClick={() => setIsJoinModalOpen(true)}
+                  className="px-8 py-4 text-lg font-medium rounded-full text-white bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                >
+                  Join Us
+                </button>
+              </motion.div>
             </div>
-            
-            <p className="text-lg sm:text-xl mb-10 max-w-2xl text-center">
-              Don&apos;t let diabetes unlock your feet. Get smart insoles now, click the button below to join the movement.
-            </p>
-            
-            <button 
-              onClick={() => setIsJoinModalOpen(true)}
-              className="group relative px-6 py-3 text-lg font-medium transition-all duration-300 ease-in-out rounded-full overflow-hidden mb-20 border-2 border-blue-500 hover:border-purple-500"
-            >
-              <span className="relative z-10 text-blue-500 group-hover:text-white">
-                Join Us
-              </span>
-              <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-purple-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-in-out"></div>
-            </button>
           </section>
 
           {/* Updated Services Section with ShineBorder */}
