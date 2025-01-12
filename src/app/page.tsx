@@ -380,26 +380,26 @@ export default function Home(): JSX.Element {
 
         <main className="flex-grow flex flex-col items-center justify-center px-4 py-8 sm:py-12 sm:px-6 lg:px-8">
           <section id="home" className="relative w-full min-h-[80vh] sm:min-h-[85vh] flex flex-col items-center justify-center px-3 sm:px-4">
-            <div className="text-center max-w-4xl mx-auto">
+            <div className="text-center max-w-4xl mx-auto absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5 }}
-                className="mb-4 sm:mb-6 flex flex-col items-center"
+                className="mb-4 sm:mb-6 flex flex-col items-center justify-center"
               >
-                <div className="flex flex-col items-center space-y-1 sm:space-y-2">
+                <div className="flex flex-col items-center justify-center space-y-1 sm:space-y-2">
                   <HyperText
                     text="Advancing possibilities"
-                    className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600 whitespace-nowrap"
+                    className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600 whitespace-nowrap text-center"
                     duration={1500}
                   />
                   <HyperText
                     text="in prosthetics and orthotics"
-                    className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-600 to-blue-600 whitespace-nowrap"
+                    className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-600 to-blue-600 whitespace-nowrap text-center"
                     duration={1500}
                   />
                 </div>
-                <p className="text-lg sm:text-xl md:text-2xl mt-6 sm:mt-8 mb-6 sm:mb-8 max-w-2xl px-3 sm:px-4 font-medium bg-gradient-to-r from-gray-700 to-gray-900 dark:from-gray-300 dark:to-gray-100 bg-clip-text text-transparent">
+                <p className="text-lg sm:text-xl md:text-2xl mt-6 sm:mt-8 mb-6 sm:mb-8 max-w-2xl px-3 sm:px-4 font-medium bg-gradient-to-r from-gray-700 to-gray-900 dark:from-gray-300 dark:to-gray-100 bg-clip-text text-transparent text-center mx-auto">
                   Don&apos;t let diabetes unlock your feet.
                 </p>
               </motion.div>
@@ -407,11 +407,11 @@ export default function Home(): JSX.Element {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2, duration: 0.5 }}
-                className="flex justify-center"
+                className="flex justify-center items-center"
               >
                 <button
                   onClick={() => setIsJoinModalOpen(true)}
-                  className="px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-medium rounded-full text-white bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                  className="px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-medium rounded-full text-white bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 mx-auto"
                 >
                   Join Us
                 </button>
