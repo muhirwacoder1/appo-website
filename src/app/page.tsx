@@ -15,13 +15,12 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Dialog, Transition } from '@headlessui/react';
 import { Fragment } from 'react';
 import { supabase } from '@/lib/supabase';
-import JoinForm from '@/components/JoinForm';
-import AppWaitlistForm from '@/components/AppWaitlistForm';
 import { Toaster } from 'react-hot-toast';
-import { toast } from 'react-hot-toast';
+import toast from 'react-hot-toast';
+import type { FormEvent } from 'react';
 
 // Team member type
-type TeamMember = {
+interface TeamMember {
   name: string;
   role: string;
   image: string;
@@ -30,11 +29,31 @@ type TeamMember = {
     facebook: string;
     linkedin: string;
   };
-};
+}
+
+interface TeamMemberProps {
+  member: TeamMember;
+}
+
+interface ContactFormData {
+  name: string;
+  email: string;
+  message: string;
+}
+
+interface JoinFormData {
+  name: string;
+  email: string;
+}
+
+interface WaitlistFormData {
+  email: string;
+  platform: 'ios' | 'android';
+}
 
 // Team member component
-const TeamMember = ({ member }: { member: TeamMember }) => {
-  const [isHovered, setIsHovered] = useState(false);
+const TeamMember = ({ member }: TeamMemberProps): JSX.Element => {
+  const [isHovered, setIsHovered] = useState<boolean>(false);
 
   return (
     <div 
@@ -68,18 +87,17 @@ const TeamMember = ({ member }: { member: TeamMember }) => {
   );
 };
 
-export default function Home() {
+export default function Home(): JSX.Element {
   const { theme, setTheme } = useTheme();
-  const [mounted, setMounted] = useState(false);
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const [isJoinModalOpen, setIsJoinModalOpen] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const [joinForm, setJoinForm] = useState({
+  const [mounted, setMounted] = useState<boolean>(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(false);
+  const [isJoinModalOpen, setIsJoinModalOpen] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [joinForm, setJoinForm] = useState<JoinFormData>({
     name: '',
     email: '',
   });
-  const [isWaitlistModalOpen, setIsWaitlistModalOpen] = useState(false);
-  const [waitlistEmail, setWaitlistEmail] = useState('');
+  const [isWaitlistModalOpen, setIsWaitlistModalOpen] = useState<boolean>(false);
   const footerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -130,21 +148,19 @@ export default function Home() {
     }
   ];
 
-  const toggleTheme = () => {
+  const toggleTheme = (): void => {
     setTheme(theme === 'dark' ? 'light' : 'dark');
   };
 
-  const [contactForm, setContactForm] = useState({
+  const [contactForm, setContactForm] = useState<ContactFormData>({
     name: '',
     email: '',
     message: ''
   });
 
-  const [isContactSubmitted, setIsContactSubmitted] = useState(false);
-  const [isJoinSubmitted, setIsJoinSubmitted] = useState(false);
-  const [isWaitlistSubmitted, setIsWaitlistSubmitted] = useState(false);
+  const [isContactSubmitted, setIsContactSubmitted] = useState<boolean>(false);
 
-  const handleContactSubmit = async (e: React.FormEvent) => {
+  const handleContactSubmit = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
     try {
       const { error } = await supabase
@@ -158,24 +174,24 @@ export default function Home() {
       if (error) throw error;
 
       setIsContactSubmitted(true);
-      toast.success('Message sent successfully! We will get back to you soon.');
+      toast.success("Message sent successfully! We&apos;ll get back to you soon.");
       setTimeout(() => setIsContactSubmitted(false), 3000);
       setContactForm({ name: '', email: '', message: '' });
-    } catch (error: any) {
+    } catch (error) {
       console.error('Error:', error);
-      toast.error(error.message || 'Failed to send message. Please try again.');
+      toast.error(error instanceof Error ? error.message : "Failed to send message. Please try again.");
     }
   };
 
-  const toggleSidebar = () => {
+  const toggleSidebar = (): void => {
     setIsSidebarOpen(!isSidebarOpen);
   };
 
-  const closeSidebar = () => {
+  const closeSidebar = (): void => {
     setIsSidebarOpen(false);
   };
 
-  const scrollToSection = (sectionId: string) => {
+  const scrollToSection = (sectionId: string): void => {
     const section = document.getElementById(sectionId);
     if (section) {
       section.scrollIntoView({ behavior: 'smooth' });
@@ -183,12 +199,14 @@ export default function Home() {
     closeSidebar();
   };
 
-  const scrollToFooter = () => {
+  // Preserved for future footer navigation implementation
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const scrollToFooter = (): void => {
     footerRef.current?.scrollIntoView({ behavior: 'smooth' });
     closeSidebar();
   };
 
-  const handleJoinSubmit = async (e: React.FormEvent) => {
+  const handleJoinSubmit = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
     setIsLoading(true);
     try {
@@ -201,25 +219,25 @@ export default function Home() {
 
       if (error) throw error;
 
-      toast.success('Successfully joined! Welcome to APPO.');
+      toast.success("Successfully joined! Welcome to APPO.");
       setJoinForm({ name: '', email: '' });
       setIsJoinModalOpen(false);
-    } catch (error: any) {
+    } catch (error) {
       console.error('Error:', error);
-      toast.error(error.message || 'Failed to join. Please try again.');
+      toast.error(error instanceof Error ? error.message : "Failed to join. Please try again.");
     } finally {
       setIsLoading(false);
     }
   };
 
-  const [isWaitlistLoading, setIsWaitlistLoading] = useState(false);
+  const [isWaitlistLoading, setIsWaitlistLoading] = useState<boolean>(false);
 
-  const [waitlistForm, setWaitlistForm] = useState({
+  const [waitlistForm, setWaitlistForm] = useState<WaitlistFormData>({
     email: '',
     platform: 'ios'
   });
 
-  const handleWaitlistSubmit = async (e: React.FormEvent) => {
+  const handleWaitlistSubmit = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
     setIsWaitlistLoading(true);
     try {
@@ -232,18 +250,18 @@ export default function Home() {
 
       if (error) throw error;
 
-      toast.success('Successfully joined the waitlist! We\'ll notify you when the app launches.');
+      toast.success("Successfully joined the waitlist! We&apos;ll notify you when the app launches.");
       setWaitlistForm({ email: '', platform: 'ios' });
       setIsWaitlistModalOpen(false);
-    } catch (error: any) {
+    } catch (error) {
       console.error('Error:', error);
-      toast.error(error.message || 'Failed to join waitlist. Please try again.');
+      toast.error(error instanceof Error ? error.message : "Failed to join waitlist. Please try again.");
     } finally {
       setIsWaitlistLoading(false);
     }
   };
 
-  const openWaitlistModal = (platform: 'ios' | 'android') => {
+  const openWaitlistModal = (platform: 'ios' | 'android'): void => {
     setWaitlistForm(prev => ({ ...prev, platform }));
     setIsWaitlistModalOpen(true);
   };
