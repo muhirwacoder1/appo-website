@@ -273,23 +273,23 @@ export default function Home(): JSX.Element {
     <>
       <Toaster position="top-center" />
       <div className="flex flex-col min-h-screen">
-        <header className="sticky top-4 z-50 mx-4 sm:mx-6 lg:mx-8">
+        <header className="sticky top-2 sm:top-4 z-50 mx-2 sm:mx-4 lg:mx-8">
           <div className="max-w-7xl mx-auto">
-            <Menubar className="flex justify-between items-center border-none bg-white/70 dark:bg-gray-800/70 backdrop-blur-md shadow-lg rounded-[50px] py-2 sm:py-4 px-4 sm:px-6 transition-all duration-300 hover:bg-white/80 dark:hover:bg-gray-800/80">
+            <Menubar className="flex justify-between items-center border-none bg-white/70 dark:bg-gray-800/70 backdrop-blur-md shadow-lg rounded-[30px] sm:rounded-[50px] py-1.5 sm:py-2 px-3 sm:px-4 transition-all duration-300 hover:bg-white/80 dark:hover:bg-gray-800/80">
               <div className="flex items-center">
                 <Image
                   src="/images/Screenshot 2024-09-16 150314.png"
                   alt="APPO Logo"
-                  width={32}
-                  height={32}
+                  width={28}
+                  height={28}
                   className="rounded-full object-cover hover:scale-105 transition-transform duration-300"
                 />
               </div>
-              <nav className="hidden md:flex justify-center space-x-2">
+              <nav className="hidden md:flex justify-center space-x-1 sm:space-x-2">
                 {["Home", "Products", "Partners", "Services", "Team", "About", "Contact"].map((item) => (
                   <MenubarMenu key={item}>
                     <MenubarTrigger 
-                      className="text-sm hover:bg-white/90 dark:hover:bg-gray-700/90 rounded-[30px] transition-all duration-300 px-4 py-2 cursor-pointer hover:scale-105"
+                      className="text-xs sm:text-sm hover:bg-white/90 dark:hover:bg-gray-700/90 rounded-[20px] sm:rounded-[30px] transition-all duration-300 px-2 sm:px-4 py-1.5 sm:py-2 cursor-pointer hover:scale-105"
                       onClick={() => scrollToSection(item.toLowerCase())}
                     >
                       {item}
@@ -297,25 +297,25 @@ export default function Home(): JSX.Element {
                   </MenubarMenu>
                 ))}
               </nav>
-              <div className="flex items-center space-x-2">
+              <div className="flex items-center space-x-1.5 sm:space-x-2">
                 <button
                   onClick={toggleTheme}
-                  className="p-2 sm:p-2.5 rounded-full bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors duration-300 text-gray-600 dark:text-gray-300"
+                  className="p-1.5 sm:p-2 rounded-full bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors duration-300 text-gray-600 dark:text-gray-300"
                 >
-                  {mounted && (theme === 'dark' ? <FaSun size={14} className="sm:w-4 sm:h-4" /> : <FaMoon size={14} className="sm:w-4 sm:h-4" />)}
+                  {mounted && (theme === 'dark' ? <FaSun size={12} className="sm:w-4 sm:h-4" /> : <FaMoon size={12} className="sm:w-4 sm:h-4" />)}
                 </button>
                 <button
                   onClick={() => setIsJoinModalOpen(true)}
-                  className="hidden md:flex items-center justify-center px-4 py-2 text-sm font-medium rounded-full text-white bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 transition-all duration-300 hover:scale-105"
+                  className="hidden md:flex items-center justify-center px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm font-medium rounded-full text-white bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 transition-all duration-300 hover:scale-105"
                 >
                   Join Us
                 </button>
                 <button
                   onClick={toggleSidebar}
-                  className="md:hidden p-2 sm:p-2.5 rounded-full bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors duration-300"
+                  className="md:hidden p-1.5 sm:p-2 rounded-full bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors duration-300"
                   aria-label="Toggle menu"
                 >
-                  {isSidebarOpen ? <FaTimes size={14} className="sm:w-4 sm:h-4" /> : <FaBars size={14} className="sm:w-4 sm:h-4" />}
+                  {isSidebarOpen ? <FaTimes size={12} className="sm:w-4 sm:h-4" /> : <FaBars size={12} className="sm:w-4 sm:h-4" />}
                 </button>
               </div>
             </Menubar>
@@ -379,27 +379,27 @@ export default function Home(): JSX.Element {
         )}
 
         <main className="flex-grow flex flex-col items-center justify-center px-4 py-8 sm:py-12 sm:px-6 lg:px-8">
-          <section id="home" className="relative w-full min-h-[85vh] flex flex-col items-center justify-center px-4">
+          <section id="home" className="relative w-full min-h-[80vh] sm:min-h-[85vh] flex flex-col items-center justify-center px-3 sm:px-4">
             <div className="text-center max-w-4xl mx-auto">
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5 }}
-                className="mb-6 flex flex-col items-center"
+                className="mb-4 sm:mb-6 flex flex-col items-center"
               >
-                <div className="flex flex-col items-center space-y-2">
+                <div className="flex flex-col items-center space-y-1 sm:space-y-2">
                   <HyperText
                     text="Advancing possibilities"
-                    className="text-3xl sm:text-4xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600 whitespace-nowrap"
+                    className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600 whitespace-nowrap"
                     duration={1500}
                   />
                   <HyperText
                     text="in prosthetics and orthotics"
-                    className="text-3xl sm:text-4xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-600 to-blue-600 whitespace-nowrap"
+                    className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-600 to-blue-600 whitespace-nowrap"
                     duration={1500}
                   />
                 </div>
-                <p className="text-xl sm:text-2xl mt-8 mb-8 max-w-2xl px-4 font-medium bg-gradient-to-r from-gray-700 to-gray-900 dark:from-gray-300 dark:to-gray-100 bg-clip-text text-transparent">
+                <p className="text-lg sm:text-xl md:text-2xl mt-6 sm:mt-8 mb-6 sm:mb-8 max-w-2xl px-3 sm:px-4 font-medium bg-gradient-to-r from-gray-700 to-gray-900 dark:from-gray-300 dark:to-gray-100 bg-clip-text text-transparent">
                   Don&apos;t let diabetes unlock your feet.
                 </p>
               </motion.div>
@@ -411,7 +411,7 @@ export default function Home(): JSX.Element {
               >
                 <button
                   onClick={() => setIsJoinModalOpen(true)}
-                  className="px-8 py-4 text-lg font-medium rounded-full text-white bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                  className="px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-medium rounded-full text-white bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                 >
                   Join Us
                 </button>
