@@ -164,17 +164,32 @@ export default function Home(): JSX.Element {
     e.preventDefault();
     setIsSubmitting(true);
     try {
+      // Validate form data
+      if (!contactForm.name.trim() || !contactForm.email.trim() || !contactForm.message.trim()) {
+        throw new Error('Please fill in all fields');
+      }
+
+      // Validate email format
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(contactForm.email)) {
+        throw new Error('Please enter a valid email address');
+      }
+
       const { error } = await supabase
-        .from('contacts')
+        .from('contact_messages')
         .insert([
           {
-            name: contactForm.name,
-            email: contactForm.email,
-            message: contactForm.message,
-          },
+            name: contactForm.name.trim(),
+            email: contactForm.email.trim().toLowerCase(),
+            message: contactForm.message.trim(),
+            created_at: new Date().toISOString()
+          }
         ]);
 
-      if (error) throw error;
+      if (error) {
+        console.error('Supabase error:', error);
+        throw new Error(error.message);
+      }
 
       toast.success("Message sent successfully! We'll get back to you soon.");
       setContactForm({ name: '', email: '', message: '' });
