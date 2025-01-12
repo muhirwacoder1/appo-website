@@ -158,28 +158,31 @@ export default function Home(): JSX.Element {
     message: ''
   });
 
-  const [isContactSubmitted, setIsContactSubmitted] = useState<boolean>(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleContactSubmit = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
+    setIsSubmitting(true);
     try {
       const { error } = await supabase
-        .from('contact_messages')
-        .insert([{
-          name: contactForm.name,
-          email: contactForm.email,
-          message: contactForm.message
-        }]);
+        .from('contacts')
+        .insert([
+          {
+            name: contactForm.name,
+            email: contactForm.email,
+            message: contactForm.message,
+          },
+        ]);
 
       if (error) throw error;
 
-      setIsContactSubmitted(true);
-      toast.success("Message sent successfully! We&apos;ll get back to you soon.");
-      setTimeout(() => setIsContactSubmitted(false), 3000);
+      toast.success("Message sent successfully! We'll get back to you soon.");
       setContactForm({ name: '', email: '', message: '' });
     } catch (error) {
       console.error('Error:', error);
       toast.error(error instanceof Error ? error.message : "Failed to send message. Please try again.");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -250,7 +253,7 @@ export default function Home(): JSX.Element {
 
       if (error) throw error;
 
-      toast.success("Successfully joined the waitlist! We&apos;ll notify you when the app launches.");
+      toast.success("Successfully joined the waitlist! We'll notify you when the app launches.");
       setWaitlistForm({ email: '', platform: 'ios' });
       setIsWaitlistModalOpen(false);
     } catch (error) {
@@ -272,13 +275,13 @@ export default function Home(): JSX.Element {
       <div className="flex flex-col min-h-screen">
         <header className="sticky top-4 z-50 mx-4 sm:mx-6 lg:mx-8">
           <div className="max-w-7xl mx-auto">
-            <Menubar className="flex justify-between items-center border-none bg-white/70 dark:bg-gray-800/70 backdrop-blur-md shadow-lg rounded-[50px] py-4 px-6 transition-all duration-300 hover:bg-white/80 dark:hover:bg-gray-800/80">
+            <Menubar className="flex justify-between items-center border-none bg-white/70 dark:bg-gray-800/70 backdrop-blur-md shadow-lg rounded-[50px] py-2 sm:py-4 px-4 sm:px-6 transition-all duration-300 hover:bg-white/80 dark:hover:bg-gray-800/80">
               <div className="flex items-center">
                 <Image
                   src="/images/Screenshot 2024-09-16 150314.png"
                   alt="APPO Logo"
-                  width={36}
-                  height={36}
+                  width={32}
+                  height={32}
                   className="rounded-full object-cover hover:scale-105 transition-transform duration-300"
                 />
               </div>
@@ -286,7 +289,7 @@ export default function Home(): JSX.Element {
                 {["Home", "Products", "Partners", "Services", "Team", "About", "Contact"].map((item) => (
                   <MenubarMenu key={item}>
                     <MenubarTrigger 
-                      className="text-sm hover:bg-white/90 dark:hover:bg-gray-700/90 rounded-[30px] transition-all duration-300 px-5 py-2.5 cursor-pointer hover:scale-105"
+                      className="text-sm hover:bg-white/90 dark:hover:bg-gray-700/90 rounded-[30px] transition-all duration-300 px-4 py-2 cursor-pointer hover:scale-105"
                       onClick={() => scrollToSection(item.toLowerCase())}
                     >
                       {item}
@@ -297,9 +300,9 @@ export default function Home(): JSX.Element {
               <div className="flex items-center space-x-2">
                 <button
                   onClick={toggleTheme}
-                  className="p-2.5 rounded-full bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors duration-300 text-gray-600 dark:text-gray-300"
+                  className="p-2 sm:p-2.5 rounded-full bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors duration-300 text-gray-600 dark:text-gray-300"
                 >
-                  {mounted && (theme === 'dark' ? <FaSun size={16} /> : <FaMoon size={16} />)}
+                  {mounted && (theme === 'dark' ? <FaSun size={14} className="sm:w-4 sm:h-4" /> : <FaMoon size={14} className="sm:w-4 sm:h-4" />)}
                 </button>
                 <button
                   onClick={() => setIsJoinModalOpen(true)}
@@ -309,16 +312,17 @@ export default function Home(): JSX.Element {
                 </button>
                 <button
                   onClick={toggleSidebar}
-                  className="md:hidden p-2.5 rounded-full bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors duration-300"
+                  className="md:hidden p-2 sm:p-2.5 rounded-full bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors duration-300"
+                  aria-label="Toggle menu"
                 >
-                  {isSidebarOpen ? <FaTimes size={16} /> : <FaBars size={16} />}
+                  {isSidebarOpen ? <FaTimes size={14} className="sm:w-4 sm:h-4" /> : <FaBars size={14} className="sm:w-4 sm:h-4" />}
                 </button>
               </div>
             </Menubar>
           </div>
         </header>
 
-        {/* Sidebar for mobile */}
+        {/* Mobile Sidebar */}
         <AnimatePresence>
           {isSidebarOpen && (
             <motion.div
@@ -326,7 +330,7 @@ export default function Home(): JSX.Element {
               animate={{ x: 0 }}
               exit={{ x: '100%' }}
               transition={{ type: 'tween' }}
-              className="fixed inset-y-0 right-0 w-64 bg-white dark:bg-gray-800 shadow-lg z-50 overflow-y-auto"
+              className="fixed inset-y-0 right-0 w-[80%] sm:w-64 bg-white dark:bg-gray-800 shadow-lg z-50 overflow-y-auto"
             >
               <div className="p-4">
                 <button
@@ -334,29 +338,32 @@ export default function Home(): JSX.Element {
                   className="absolute top-4 right-4 p-2 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200"
                   aria-label="Close menu"
                 >
-                  <FaTimes size={16} />
+                  <FaTimes size={14} className="sm:w-4 sm:h-4" />
                 </button>
-                <nav className="mt-8 space-y-4">
+                <nav className="mt-12 space-y-2">
                   {["Home", "Products", "Partners", "Services", "Team", "About", "Contact"].map((item) => (
                     <a
                       key={item}
                       href={`#${item.toLowerCase()}`}
-                      className="block py-2 px-4 text-gray-800 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md transition-colors"
+                      className="block py-3 px-4 text-base text-gray-800 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
                       onClick={(e) => {
                         e.preventDefault();
                         scrollToSection(item.toLowerCase());
+                        closeSidebar();
                       }}
                     >
                       {item}
                     </a>
                   ))}
-                  <a
-                    href="#contact"
-                    className="block py-2 px-4 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors"
-                    onClick={closeSidebar}
+                  <button
+                    onClick={() => {
+                      setIsJoinModalOpen(true);
+                      closeSidebar();
+                    }}
+                    className="w-full mt-4 py-3 px-4 text-base font-medium text-white bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 rounded-lg transition-all duration-300"
                   >
-                    Contact Us
-                  </a>
+                    Join Us
+                  </button>
                 </nav>
               </div>
             </motion.div>
@@ -571,20 +578,20 @@ export default function Home(): JSX.Element {
 
           {/* Message Us Section */}
           <section id="contact" className="w-full max-w-5xl mx-auto mt-12 sm:mt-20 px-4">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600">
+            <div className="text-center mb-8 sm:mb-12">
+              <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600">
                 Get in Touch
               </h2>
-              <p className="mt-4 text-gray-600 dark:text-gray-300 text-lg max-w-2xl mx-auto">
+              <p className="mt-4 text-gray-600 dark:text-gray-300 text-base sm:text-lg max-w-2xl mx-auto px-4">
                 Have a question, suggestion, or just want to say hello? We'd love to hear from you. Fill out the form below and we'll get back to you as soon as possible.
               </p>
             </div>
             
-            <div className="bg-white/80 dark:bg-gray-800/80 rounded-3xl shadow-2xl p-8 md:p-12 backdrop-blur-lg border border-gray-100 dark:border-gray-700 hover:shadow-xl transition-all duration-300">
-              <form onSubmit={handleContactSubmit} className="max-w-2xl mx-auto space-y-8">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            <div className="bg-white/80 dark:bg-gray-800/80 rounded-2xl sm:rounded-3xl shadow-xl sm:shadow-2xl p-6 sm:p-8 md:p-12 backdrop-blur-lg border border-gray-100 dark:border-gray-700 hover:shadow-xl transition-all duration-300">
+              <form onSubmit={handleContactSubmit} className="max-w-2xl mx-auto space-y-6 sm:space-y-8">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
                   <div>
-                    <label htmlFor="name" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    <label htmlFor="name" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5 sm:mb-2">
                       Your Name
                     </label>
                     <input
@@ -594,13 +601,12 @@ export default function Home(): JSX.Element {
                       value={contactForm.name}
                       onChange={(e) => setContactForm({...contactForm, name: e.target.value})}
                       required
-                      className="w-full px-4 py-3 rounded-xl border-gray-300 focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700/50 dark:border-gray-600 dark:text-white transition-colors placeholder-gray-400 dark:placeholder-gray-500"
+                      className="w-full px-3 sm:px-4 py-2.5 sm:py-3 text-base rounded-lg sm:rounded-xl border-gray-300 focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700/50 dark:border-gray-600 dark:text-white transition-colors placeholder-gray-400 dark:placeholder-gray-500"
                       placeholder="John Doe"
                     />
                   </div>
-
                   <div>
-                    <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5 sm:mb-2">
                       Your Email
                     </label>
                     <input
@@ -610,14 +616,14 @@ export default function Home(): JSX.Element {
                       value={contactForm.email}
                       onChange={(e) => setContactForm({...contactForm, email: e.target.value})}
                       required
-                      className="w-full px-4 py-3 rounded-xl border-gray-300 focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700/50 dark:border-gray-600 dark:text-white transition-colors placeholder-gray-400 dark:placeholder-gray-500"
+                      className="w-full px-3 sm:px-4 py-2.5 sm:py-3 text-base rounded-lg sm:rounded-xl border-gray-300 focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700/50 dark:border-gray-600 dark:text-white transition-colors placeholder-gray-400 dark:placeholder-gray-500"
                       placeholder="john@example.com"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label htmlFor="message" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  <label htmlFor="message" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5 sm:mb-2">
                     Your Message
                   </label>
                   <textarea
@@ -627,53 +633,44 @@ export default function Home(): JSX.Element {
                     onChange={(e) => setContactForm({...contactForm, message: e.target.value})}
                     required
                     rows={6}
-                    className="w-full px-4 py-3 rounded-xl border-gray-300 focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700/50 dark:border-gray-600 dark:text-white transition-colors placeholder-gray-400 dark:placeholder-gray-500 resize-none"
+                    className="w-full px-3 sm:px-4 py-2.5 sm:py-3 text-base rounded-lg sm:rounded-xl border-gray-300 focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700/50 dark:border-gray-600 dark:text-white transition-colors placeholder-gray-400 dark:placeholder-gray-500 resize-none"
                     placeholder="How can we help you?"
                   ></textarea>
                 </div>
 
-                <button
-                  type="submit"
-                  className="w-full sm:w-auto flex items-center justify-center px-8 py-4 text-base font-medium rounded-xl text-white bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-300 transform hover:scale-105"
-                >
-                  {isContactSubmitted ? (
-                    <span className="flex items-center space-x-2">
-                      <FaCheckCircle className="text-lg" />
-                      <span>Message Sent!</span>
-                    </span>
-                  ) : (
-                    <span className="flex items-center space-x-2">
-                      <span>Send Message</span>
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                        <path fillRule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clipRule="evenodd" />
-                      </svg>
-                    </span>
-                  )}
-                </button>
+                <div className="flex justify-center">
+                  <button
+                    type="submit"
+                    className="w-full sm:w-auto px-6 sm:px-8 py-3 text-base font-medium text-white bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 rounded-lg sm:rounded-xl transition-all duration-300 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
+                    disabled={isSubmitting}
+                  >
+                    {isSubmitting ? 'Sending...' : 'Send Message'}
+                  </button>
+                </div>
               </form>
             </div>
           </section>
         </main>
 
         <footer ref={footerRef} className="bg-gradient-to-r from-gray-100 to-gray-200 dark:from-gray-900 dark:to-gray-800 mt-12 sm:mt-20">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-16">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 lg:py-12">
             <motion.div 
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
-              className="flex flex-col md:flex-row justify-between items-center"
+              className="flex flex-col md:flex-row justify-between items-center space-y-8 md:space-y-0"
             >
               <motion.div 
-                className="mb-8 md:mb-0 text-center md:text-left"
+                className="w-full md:w-auto text-center md:text-left"
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.2, duration: 0.5 }}
               >
-                <h3 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-6 text-gray-800 dark:text-gray-200 bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600">
+                <h3 className="text-xl sm:text-2xl md:text-3xl font-bold mb-4 sm:mb-6 text-gray-800 dark:text-gray-200 bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600">
                   Contact Us
                 </h3>
                 <motion.div 
-                  className="space-y-4"
+                  className="space-y-3 sm:space-y-4"
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.4, duration: 0.5 }}
@@ -684,8 +681,8 @@ export default function Home(): JSX.Element {
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                   >
-                    <FaEnvelope className="mr-3 text-blue-500 group-hover:animate-bounce" />
-                    <span className="text-lg">appoltd8@gmail.com</span>
+                    <FaEnvelope className="mr-2 sm:mr-3 text-blue-500 group-hover:animate-bounce w-4 h-4 sm:w-5 sm:h-5" />
+                    <span className="text-base sm:text-lg">appoltd8@gmail.com</span>
                   </motion.a>
                   <motion.a 
                     href="tel:+250784131200" 
@@ -693,13 +690,13 @@ export default function Home(): JSX.Element {
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                   >
-                    <FaPhone className="mr-3 text-blue-500 group-hover:animate-bounce" />
-                    <span className="text-lg">+250 784 131 200</span>
+                    <FaPhone className="mr-2 sm:mr-3 text-blue-500 group-hover:animate-bounce w-4 h-4 sm:w-5 sm:h-5" />
+                    <span className="text-base sm:text-lg">+250 784 131 200</span>
                   </motion.a>
                 </motion.div>
               </motion.div>
               <motion.div 
-                className="flex space-x-6"
+                className="flex space-x-4 sm:space-x-6"
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.6, duration: 0.5 }}
@@ -712,7 +709,7 @@ export default function Home(): JSX.Element {
                   whileHover={{ scale: 1.2, rotate: 360 }}
                   whileTap={{ scale: 0.8 }}
                 >
-                  <FaTwitter size={32} />
+                  <FaTwitter className="w-6 h-6 sm:w-8 sm:h-8" />
                 </motion.a>
                 <motion.a 
                   href="https://www.linkedin.com/in/muhirwa-alex-64aa2b268/" 
@@ -722,18 +719,18 @@ export default function Home(): JSX.Element {
                   whileHover={{ scale: 1.2, rotate: 360 }}
                   whileTap={{ scale: 0.8 }}
                 >
-                  <FaLinkedin size={32} />
+                  <FaLinkedin className="w-6 h-6 sm:w-8 sm:h-8" />
                 </motion.a>
               </motion.div>
             </motion.div>
             <motion.div 
-              className="mt-8 sm:mt-12 text-center text-xs sm:text-sm text-gray-500 dark:text-gray-400"
+              className="mt-6 sm:mt-8 text-center text-xs sm:text-sm text-gray-500 dark:text-gray-400"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.8, duration: 0.5 }}
             >
               <p>© {new Date().getFullYear()} APPO LTD. All rights reserved.</p>
-              <p className="mt-2">Innovating for a healthier future.</p>
+              <p className="mt-1 sm:mt-2">Innovating for a healthier future.</p>
             </motion.div>
           </div>
         </footer>
